@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optional Add-ons</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: visible;
+            padding-bottom: 60px;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+            width: 15%;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .addon-card {
+            height: 280px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(58, 123, 213, 0.3);
+            transition: all 0.3s ease;
+        }
+        .addon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.2);
+            border-color: rgba(58, 123, 213, 0.6);
+        }
+        .addon-header {
+            background: linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
+            padding: 15px;
+            border-bottom: 2px solid rgba(0, 210, 255, 0.3);
+        }
+        .addon-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .keycloak-icon {
+            background: linear-gradient(135deg, #4b6cb7, #182848);
+        }
+        .prometheus-icon {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        .argo-icon {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        .mlflow-icon {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        .addon-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .addon-content {
+            padding: 15px;
+        }
+        .feature-list {
+            margin-top: 10px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .feature-item i {
+            color: #00d2ff;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+        .tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-right: 5px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        .tag-security {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: #333;
+        }
+        .tag-monitoring {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: #fff;
+        }
+        .tag-workflow {
+            background: linear-gradient(90deg, #9b59b6, #8e44ad);
+            color: #fff;
+        }
+        .tag-ml {
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            color: #fff;
+        }
+        .integration-diagram {
+            height: 420px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+        .page-number {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .animation-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.2s; }
+        .animation-delay-3 { animation-delay: 0.3s; }
+        .animation-delay-4 { animation-delay: 0.4s; }
+        .animation-delay-5 { animation-delay: 0.5s; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .nav-arrow:hover {
+            background: rgba(0, 210, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        .nav-arrow.right {
+            right: 20px;
+        }
+        .nav-arrow.left {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col px-16 py-12 relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Arrows -->
+        <a href="7.html" class="nav-arrow left">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="9.html" class="nav-arrow right">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        
+        <div class="animation-fade-in">
+            <h1 class="title">Optional Add-ons</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <!-- Optional Add-ons Grid -->
+        <div class="grid grid-cols-2 gap-6 mt-4">
+            <!-- Keycloak Card -->
+            <div class="addon-card animation-slide-up animation-delay-1">
+                <div class="addon-header flex items-center">
+                    <div class="addon-icon keycloak-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h2 class="addon-title">Keycloak</h2>
+                </div>
+                <div class="addon-content">
+                    <div class="tag tag-security">SECURITY & IDENTITY</div>
+                    <div class="feature-list mt-4">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Single Sign-On (SSO) integration</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Identity brokering with corporate directory</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>User federation with LDAP/Active Directory</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Multi-factor authentication support</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Prometheus + Grafana Card -->
+            <div class="addon-card animation-slide-up animation-delay-2">
+                <div class="addon-header flex items-center">
+                    <div class="addon-icon prometheus-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2 class="addon-title">Prometheus + Grafana</h2>
+                </div>
+                <div class="addon-content">
+                    <div class="tag tag-monitoring">MONITORING</div>
+                    <div class="feature-list mt-4">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Real-time platform metrics & alerting</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>GPU utilization and memory tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Custom dashboards for different stakeholders</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Historical data for capacity planning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Argo Workflows Card -->
+            <div class="addon-card animation-slide-up animation-delay-3">
+                <div class="addon-header flex items-center">
+                    <div class="addon-icon argo-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h2 class="addon-title">Argo Workflows</h2>
+                </div>
+                <div class="addon-content">
+                    <div class="tag tag-workflow">ORCHESTRATION</div>
+                    <div class="feature-list mt-4">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Automated ML pipeline orchestration</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>DAG-based workflow definition</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Parallel execution of training jobs</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Visual workflow editor & status dashboard</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MLflow Card -->
+            <div class="addon-card animation-slide-up animation-delay-4">
+                <div class="addon-header flex items-center">
+                    <div class="addon-icon mlflow-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h2 class="addon-title">MLflow</h2>
+                </div>
+                <div class="addon-content">
+                    <div class="tag tag-ml">MODEL MANAGEMENT</div>
+                    <div class="feature-list mt-4">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Model version tracking & comparison</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Experiment tracking & reproducibility</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Model registry & deployment management</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Artifact storage & parameter tracking</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Integration Diagram -->
+        <div class="integration-diagram mt-4 animation-slide-up animation-delay-5">
+            <div class="mermaid">
+                flowchart LR
+                    classDef base fill:#203a43,stroke:#00d2ff,color:white,stroke-width:2px
+                    classDef security fill:#4b6cb7,stroke:#00d2ff,color:white,stroke-width:2px
+                    classDef monitoring fill:#e74c3c,stroke:#00d2ff,color:white,stroke-width:2px
+                    classDef workflow fill:#9b59b6,stroke:#00d2ff,color:white,stroke-width:2px
+                    classDef ml fill:#2ecc71,stroke:#00d2ff,color:white,stroke-width:2px
+                    
+                    Core[Core Platform]
+                    KC[Keycloak SSO]
+                    PG[Prometheus/Grafana]
+                    AW[Argo Workflows]
+                    ML[MLflow]
+                    
+                    Core -->|authentication| KC
+                    Core -->|metrics| PG
+                    Core -->|jobs & pipelines| AW
+                    Core -->|model tracking| ML
+                    
+                    class Core base
+                    class KC security
+                    class PG monitoring
+                    class AW workflow
+                    class ML ml
+            </div>
+        </div>
+        
+        <div class="page-number">8</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                theme: 'dark',
+                securityLevel: 'loose',
+                startOnLoad: true
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Setup (Docker)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+            width: 15%;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .code-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            position: relative;
+            border-left: 4px solid #00d2ff;
+            font-size: 0.9rem;
+            height: 490px;
+            overflow-y: auto;
+        }
+        .code-title {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            padding: 3px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .code-line {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #00d2ff;
+            font-weight: bold;
+        }
+        .comment {
+            color: #888;
+            font-style: italic;
+        }
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(58, 123, 213, 0.8), rgba(0, 210, 255, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .service-desc {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+        .volume-icon {
+            position: absolute;
+            bottom: 70px;
+            right: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 210, 255, 0.8);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 2.2rem;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.3);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 210, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 210, 255, 0);
+            }
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        .docker-diagram {
+            height: 440px;
+        }
+        .animation-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.3s; }
+        .animation-delay-3 { animation-delay: 0.5s; }
+        .animation-delay-4 { animation-delay: 0.7s; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .nav-arrow:hover {
+            background: rgba(0, 210, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        .nav-arrow.right {
+            right: 20px;
+        }
+        .nav-arrow.left {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col px-20 py-12 relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Arrows -->
+        <a href="5.html" class="nav-arrow left">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="7.html" class="nav-arrow right">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        
+        <div class="animation-fade-in">
+            <h1 class="title">Simple Setup (Docker)</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="flex mt-4">
+            <!-- Docker Compose Visualization -->
+            <div class="w-3/5 animation-slide-up animation-delay-1">
+                <div class="code-container">
+                    <div class="code-title">docker-compose.yml</div>
+                    <pre class="text-left whitespace-pre-line"><code>
+<span class="comment"># Data Science Platform Docker Compose</span>
+<span class="highlight">version: '3'</span>
+
+<span class="highlight">services:</span>
+  <span class="highlight">jupyterhub:</span>
+    image: jupyterhub/jupyterhub:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - jupyterhub_data:/data
+      - ./jupyterhub_config.py:/etc/jupyterhub/jupyterhub_config.py
+    depends_on:
+      - mlflow
+    networks:
+      - ds_platform
+
+  <span class="highlight">mlflow:</span>
+    image: ghcr.io/mlflow/mlflow:latest
+    ports:
+      - "5000:5000"
+    command: mlflow server --host 0.0.0.0 --backend-store-uri sqlite:///mlflow.db --default-artifact-root /mlruns
+    volumes:
+      - mlflow_data:/mlruns
+      - ./mlflow.db:/mlflow.db
+      - jupyterhub_data:/data
+    networks:
+      - ds_platform
+
+  <span class="highlight">minio:</span>
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /data --console-address ":9001"
+    networks:
+      - ds_platform
+
+<span class="highlight">volumes:</span>
+  jupyterhub_data:  <span class="comment"># Shared across containers</span>
+  mlflow_data:
+  minio_data:
+
+<span class="highlight">networks:</span>
+  ds_platform:
+                    </code></pre>
+                </div>
+            </div>
+            
+            <!-- Services Cards -->
+            <div class="w-2/5 pl-8 space-y-4">
+                <div class="service-card animation-slide-up animation-delay-2">
+                    <div class="service-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="service-title">JupyterHub</div>
+                    <div class="service-desc">Multi-user notebook environment for data scientists. Provides web interface for creating and sharing notebooks.</div>
+                </div>
+                
+                <div class="service-card animation-slide-up animation-delay-3">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="service-title">MLflow</div>
+                    <div class="service-desc">Tracks experiments, packages code, and shares models. Central repository for ML lifecycle.</div>
+                </div>
+                
+                <div class="service-card animation-slide-up animation-delay-4">
+                    <div class="service-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="service-title">MinIO</div>
+                    <div class="service-desc">S3-compatible object storage for datasets, models, and artifacts. High-performance and scalable.</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Shared Volume Visualization -->
+        <div class="volume-icon animation-fade-in animation-delay-4">
+            <i class="fas fa-hdd"></i>
+            <div class="text-sm font-semibold mt-2">Shared /data</div>
+        </div>
+        
+        <div class="docker-diagram" style="display: none;">
+            <pre class="mermaid">
+graph TD
+    classDef container fill:#1F4B6E,stroke:#00d2ff,stroke-width:2px,color:white;
+    classDef volume fill:#203a43,stroke:#00d2ff,stroke-width:2px,color:white;
+    classDef network fill:#0f2027,stroke:#00d2ff,stroke-width:2px,color:white;
+    
+    A[JupyterHub Container] -.->|mounts| D[jupyterhub_data]
+    B[MLflow Container] -.->|mounts| D
+    B -.->|mounts| E[mlflow_data]
+    C[MinIO Container] -.->|mounts| F[minio_data]
+    A -.->|network| G[ds_platform network]
+    B -.->|network| G
+    C -.->|network| G
+    
+    class A,B,C container;
+    class D,E,F volume;
+    class G network;
+            </pre>
+        </div>
+        
+        <div class="page-number">6</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                theme: 'dark',
+                securityLevel: 'loose',
+                startOnLoad: true
+            });
+        });
+    </script>
+</body>
+</html>

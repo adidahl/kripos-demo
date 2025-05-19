@@ -1,0 +1,15 @@
+artifact_uri: /mlruns/633960564456632817/cb8ce1cee537488f882de9ef36463c17/artifacts
+end_time: 1747564963260
+entry_point_name: ''
+experiment_id: '633960564456632817'
+lifecycle_stage: active
+run_id: cb8ce1cee537488f882de9ef36463c17
+run_name: melodic-whale-589
+run_uuid: cb8ce1cee537488f882de9ef36463c17
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747564951480
+status: 4
+tags: []
+user_id: adi

@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  jupyterhub:
+    build: ./jupyterhub
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./shared-data:/data
+      - ./shared-data:/shared-data
+    container_name: jupyterhub
+
+  mlflow:
+    build:
+      context: ./mlflow
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./shared-data:/shared-data
+    container_name: mlflow
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./shared-data/minio:/data
+    env_file:
+      - ./minio/minio.env
+    command: server /data --console-address ":9001"
+    container_name: minio

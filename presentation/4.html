@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Level Architecture Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+            width: 15%;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .architecture-container {
+            position: relative;
+            height: 500px;
+        }
+        .arch-layer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .arch-component {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            position: relative;
+            width: 150px;
+            z-index: 2;
+        }
+        .arch-component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .arch-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(58, 123, 213, 0.8), rgba(0, 210, 255, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+        }
+        .arch-arrow {
+            position: absolute;
+            border-top: 2px solid rgba(58, 123, 213, 0.8);
+            width: 50px;
+            z-index: 1;
+        }
+        .arch-arrow:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -5px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid rgba(58, 123, 213, 0.8);
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        .key-component {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 8px 15px;
+            display: inline-block;
+            margin: 5px;
+            border-left: 3px solid #3a7bd5;
+        }
+        .animation-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.2s; }
+        .animation-delay-3 { animation-delay: 0.3s; }
+        .animation-delay-4 { animation-delay: 0.4s; }
+        .animation-delay-5 { animation-delay: 0.5s; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .nav-arrow:hover {
+            background: rgba(0, 210, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        .nav-arrow.right {
+            right: 20px;
+        }
+        .nav-arrow.left {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col px-20 py-12 relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Arrows -->
+        <a href="3.html" class="nav-arrow left">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="5.html" class="nav-arrow right">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        
+        <div class="animation-fade-in">
+            <h1 class="title">High-Level Architecture Overview</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="architecture-container mt-6">
+            <!-- Users Layer -->
+            <div class="arch-layer absolute top-0 w-full animation-fade-in animation-delay-1">
+                <div class="arch-component" id="user">
+                    <div class="arch-icon">
+                        <i class="fas fa-users text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">Data Scientists</span>
+                </div>
+            </div>
+            
+            <!-- Access Layer -->
+            <div class="arch-layer absolute top-28 w-full animation-fade-in animation-delay-2">
+                <div class="arch-component mr-32" id="jupyterhub">
+                    <div class="arch-icon">
+                        <i class="fas fa-laptop-code text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">JupyterHub</span>
+                </div>
+                <div class="arch-component ml-32">
+                    <div class="arch-icon">
+                        <i class="fas fa-key text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">Keycloak</span>
+                </div>
+            </div>
+
+            <!-- Platform Layer -->
+            <div class="arch-layer absolute top-56 w-full animation-fade-in animation-delay-3">
+                <div class="arch-component">
+                    <div class="arch-icon">
+                        <i class="fas fa-dharmachakra text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">Kubernetes</span>
+                </div>
+            </div>
+            
+            <!-- Services Layer -->
+            <div class="arch-layer absolute top-96 w-full animation-fade-in animation-delay-4">
+                <div class="arch-component mr-80">
+                    <div class="arch-icon">
+                        <i class="fas fa-chart-line text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">MLflow</span>
+                </div>
+                <div class="arch-component">
+                    <div class="arch-icon">
+                        <i class="fas fa-database text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">MinIO</span>
+                </div>
+                <div class="arch-component ml-80">
+                    <div class="arch-icon">
+                        <i class="fas fa-tachometer-alt text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">Prometheus</span>
+                </div>
+            </div>
+
+            <!-- Infrastructure Layer -->
+            <div class="arch-layer absolute bottom-0 w-full animation-fade-in animation-delay-5">
+                <div class="arch-component mr-40">
+                    <div class="arch-icon">
+                        <i class="fas fa-microchip text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">GPU Nodes</span>
+                </div>
+                <div class="arch-component ml-40">
+                    <div class="arch-icon">
+                        <i class="fas fa-hdd text-2xl text-white"></i>
+                    </div>
+                    <span class="font-semibold mt-2">Storage</span>
+                </div>
+            </div>
+            
+            <!-- Arrows -->
+            <svg class="absolute top-0 left-0 w-full h-full" style="z-index: 1;">
+                <!-- Users to JupyterHub -->
+                <path d="M640,80 L560,130" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <!-- Users to Keycloak -->
+                <path d="M640,80 L720,130" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <!-- JupyterHub to K8s -->
+                <path d="M560,175 L630,235" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <!-- Keycloak to K8s -->
+                <path d="M720,175 L650,235" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <!-- K8s to Services -->
+                <path d="M640,280 L475,350" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <path d="M640,280 L640,350" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <path d="M640,280 L805,350" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <!-- Services to Infrastructure -->
+                <path d="M475,395 L600,450" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <path d="M640,395 L600,450" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <path d="M640,395 L680,450" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                <path d="M805,395 L680,450" stroke="url(#blueGradient)" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
+                
+                <!-- Gradient and Arrow definitions -->
+                <defs>
+                    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#00d2ff;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3a7bd5;stop-opacity:1" />
+                    </linearGradient>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#3a7bd5" />
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+        
+        <div class="mt-4 flex flex-wrap justify-center animation-fade-in animation-delay-5">
+            <div class="key-component">
+                <i class="fas fa-check-circle text-blue-400 mr-1"></i>
+                Scalable
+            </div>
+            <div class="key-component">
+                <i class="fas fa-lock text-blue-400 mr-1"></i>
+                Secure
+            </div>
+            <div class="key-component">
+                <i class="fas fa-cubes text-blue-400 mr-1"></i>
+                Modular
+            </div>
+            <div class="key-component">
+                <i class="fas fa-arrows-alt text-blue-400 mr-1"></i>
+                Extensible
+            </div>
+            <div class="key-component">
+                <i class="fas fa-eye text-blue-400 mr-1"></i>
+                Observable
+            </div>
+        </div>
+        
+        <div class="page-number">4</div>
+    </div>
+
+    <script>
+    function getCenter(el) {
+        const rect = el.getBoundingClientRect();
+        return {
+            x: rect.left + rect.width / 2 + window.scrollX,
+            y: rect.top + rect.height / 2 + window.scrollY
+        };
+    }
+
+    function drawArrow(svg, fromEl, toEl) {
+        if (!fromEl || !toEl) return;
+        
+        const from = getCenter(fromEl);
+        const to = getCenter(toEl);
+
+        // Adjust for SVG's coordinate system
+        const svgRect = svg.getBoundingClientRect();
+        const startX = from.x - svgRect.left;
+        const startY = from.y - svgRect.top;
+        const endX = to.x - svgRect.left;
+        const endY = to.y - svgRect.top;
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", `M${startX},${startY} L${endX},${endY}`);
+        path.setAttribute("stroke", "url(#blueGradient)");
+        path.setAttribute("stroke-width", "2");
+        path.setAttribute("fill", "none");
+        path.setAttribute("marker-end", "url(#arrowhead)");
+        svg.appendChild(path);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const svg = document.querySelector('svg');
+        // Remove old paths
+        svg.querySelectorAll('path').forEach(p => p.remove());
+
+        // Get all component elements
+        const user = document.querySelector('.arch-layer:nth-child(1) .arch-component');
+        const jupyterhub = document.querySelector('.arch-layer:nth-child(2) .arch-component:nth-child(1)');
+        const keycloak = document.querySelector('.arch-layer:nth-child(2) .arch-component:nth-child(2)');
+        const kubernetes = document.querySelector('.arch-layer:nth-child(3) .arch-component');
+        const mlflow = document.querySelector('.arch-layer:nth-child(4) .arch-component:nth-child(1)');
+        const minio = document.querySelector('.arch-layer:nth-child(4) .arch-component:nth-child(2)');
+        const prometheus = document.querySelector('.arch-layer:nth-child(4) .arch-component:nth-child(3)');
+        const gpu = document.querySelector('.arch-layer:nth-child(5) .arch-component:nth-child(1)');
+        const storage = document.querySelector('.arch-layer:nth-child(5) .arch-component:nth-child(2)');
+
+        // Draw arrows between components
+        drawArrow(svg, user, jupyterhub);
+        drawArrow(svg, user, keycloak);
+        drawArrow(svg, jupyterhub, kubernetes);
+        drawArrow(svg, keycloak, kubernetes);
+        drawArrow(svg, kubernetes, mlflow);
+        drawArrow(svg, kubernetes, minio);
+        drawArrow(svg, kubernetes, prometheus);
+        drawArrow(svg, mlflow, gpu);
+        drawArrow(svg, minio, gpu);
+        drawArrow(svg, minio, storage);
+        drawArrow(svg, prometheus, storage);
+    });
+    </script>
+</body>
+</html>

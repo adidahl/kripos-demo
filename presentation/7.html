@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Setup</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: visible;
+            padding-bottom: 60px;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+            width: 15%;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .code-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            position: relative;
+            border-left: 4px solid #00d2ff;
+            font-size: 0.9rem;
+            height: 360px;
+            overflow-y: auto;
+        }
+        .code-title {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            padding: 3px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .code-line {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #00d2ff;
+            font-weight: bold;
+        }
+        .comment {
+            color: #888;
+            font-style: italic;
+        }
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .tool-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(58, 123, 213, 0.8), rgba(0, 210, 255, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        .tool-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .tool-desc {
+            font-size: 0.8rem;
+            line-height: 1.3;
+            opacity: 0.9;
+        }
+        .k8s-diagram {
+            height: 620px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+        .gpu-badge {
+            position: absolute;
+            top: 110px;
+            right: 30px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: #333;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(255, 126, 95, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 126, 95, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 126, 95, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 126, 95, 0);
+            }
+        }
+        .gpu-badge i {
+            margin-right: 5px;
+        }
+        .page-number {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        .feature-item i {
+            margin-right: 8px;
+            color: #00d2ff;
+        }
+        .animation-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.2s; }
+        .animation-delay-3 { animation-delay: 0.3s; }
+        .animation-delay-4 { animation-delay: 0.4s; }
+        .animation-delay-5 { animation-delay: 0.5s; }
+        .animation-delay-6 { animation-delay: 0.6s; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .nav-arrow:hover {
+            background: rgba(0, 210, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        .nav-arrow.right {
+            right: 20px;
+        }
+        .nav-arrow.left {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col px-20 py-12 relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Arrows -->
+        <a href="6.html" class="nav-arrow left">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="8.html" class="nav-arrow right">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        
+        <div class="animation-fade-in">
+            <h1 class="title">Kubernetes Setup</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex mt-4">
+            <!-- Left Column: Code and Diagram -->
+            <div class="w-7/12 pr-6">
+                <!-- Code Snippets -->
+                <div class="code-container animation-slide-up animation-delay-1">
+                    <div class="code-title">Kubernetes Configuration</div>
+                    <pre class="text-left whitespace-pre-line"><code>
+<span class="comment"># Start Minikube with GPU support</span>
+<span class="highlight">minikube start --driver=docker --addons=gpu</span>
+
+<span class="comment"># Add JupyterHub Helm repository</span>
+<span class="highlight">helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/</span>
+<span class="highlight">helm repo update</span>
+
+<span class="comment"># Install JupyterHub with custom config</span>
+<span class="highlight">helm install jhub jupyterhub/jupyterhub --version=2.0.0 \
+  --values jupyterhub-values.yaml \
+  --namespace jhub \
+  --create-namespace</span>
+
+<span class="comment"># Create PersistentVolumeClaim for shared data</span>
+<span class="highlight">kubectl apply -f - <<EOF
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-data-pvc
+  namespace: jhub
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+EOF</span>
+
+<span class="comment"># Apply GPU node labels</span>
+<span class="highlight">kubectl label nodes minikube gpu=true</span>
+<span class="highlight">kubectl label nodes minikube accelerator=nvidia</span>
+
+<span class="comment"># Create namespace for MLflow</span>
+<span class="highlight">kubectl create namespace mlflow</span>
+                    </code></pre>
+                </div>
+                
+                <!-- Kubernetes Diagram -->
+                <div class="k8s-diagram mt-4 animation-slide-up animation-delay-2">
+                    <div class="mermaid">
+                        graph TD
+                            classDef cluster fill:#1F4B6E,stroke:#00d2ff,stroke-width:2px,color:white
+                            classDef node fill:#203a43,stroke:#00d2ff,stroke-width:2px,color:white
+                            classDef pod fill:#2c5364,stroke:#00d2ff,stroke-width:2px,color:white
+                            classDef volume fill:#0f2027,stroke:#feb47b,stroke-width:2px,color:white
+                            
+                            A[Minikube Cluster] -->|contains| B[GPU-labeled Node]
+                            B -->|runs| C[JupyterHub Namespace]
+                            B -->|runs| D[MLflow Namespace]
+                            C -->|contains| E[JupyterHub Pods]
+                            C -->|contains| F[User Notebook Pods]
+                            E -->|mounts| G[PV: Shared Data]
+                            F -->|mounts| G
+                            D -->|contains| H[MLflow Pods]
+                            H -->|mounts| G
+                            
+                            class A cluster
+                            class B node
+                            class C,D cluster
+                            class E,F,H pod
+                            class G volume
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Tools and Features -->
+            <div class="w-5/12 pl-6">
+                <!-- GPU Badge -->
+                <div class="gpu-badge animation-fade-in animation-delay-1">
+                    <i class="fas fa-microchip"></i> GPU Simulation via Node Labels
+                </div>
+                
+                <!-- Tools Grid -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="tool-card animation-slide-up animation-delay-3">
+                        <div class="tool-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="tool-title">Minikube</div>
+                        <div class="tool-desc">Local Kubernetes cluster for development and testing</div>
+                    </div>
+                    
+                    <div class="tool-card animation-slide-up animation-delay-4">
+                        <div class="tool-icon">
+                            <i class="fas fa-dharmachakra"></i>
+                        </div>
+                        <div class="tool-title">Helm</div>
+                        <div class="tool-desc">Package manager for Kubernetes applications</div>
+                    </div>
+                    
+                    <div class="tool-card animation-slide-up animation-delay-5">
+                        <div class="tool-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="tool-title">JupyterHub Chart</div>
+                        <div class="tool-desc">Helm chart for deploying multi-user notebooks</div>
+                    </div>
+                    
+                    <div class="tool-card animation-slide-up animation-delay-6">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="tool-title">PersistentVolumes</div>
+                        <div class="tool-desc">Persistent storage for data across pod restarts</div>
+                    </div>
+                </div>
+                
+                <!-- K8s Features List -->
+                <div class="bg-black bg-opacity-20 p-4 rounded-lg animation-slide-up animation-delay-2">
+                    <h3 class="text-lg font-bold mb-3">Key Kubernetes Features</h3>
+                    <div class="feature-item">
+                        <i class="fas fa-users-cog"></i>
+                        <span>Namespaces for service isolation</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>RBAC for access control</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Service discovery & load balancing</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Self-healing capabilities</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        <span>Horizontal scaling of components</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-tags"></i>
+                        <span>Node labels for GPU targeting</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-number">7</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                theme: 'dark',
+                securityLevel: 'loose',
+                startOnLoad: true
+            });
+        });
+    </script>
+</body>
+</html>

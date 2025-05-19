@@ -1,0 +1,15 @@
+artifact_uri: /mlruns/633960564456632817/5f423b14a037493c95e0d97411ea093e/artifacts
+end_time: 1747565156120
+entry_point_name: ''
+experiment_id: '633960564456632817'
+lifecycle_stage: active
+run_id: 5f423b14a037493c95e0d97411ea093e
+run_name: classy-bug-903
+run_uuid: 5f423b14a037493c95e0d97411ea093e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747565154627
+status: 4
+tags: []
+user_id: adi

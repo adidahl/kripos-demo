@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Considerations</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: visible;
+            padding-bottom: 60px;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+            width: 15%;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .future-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            height: 100%;
+            border: 1px solid rgba(58, 123, 213, 0.3);
+            transition: all 0.3s ease;
+        }
+        .future-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.2);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-right: 15px;
+        }
+        .security-icon { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .scaling-icon { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .network-icon { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .api-icon { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        .feature-list {
+            margin-top: 15px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .feature-icon {
+            color: #00d2ff;
+            margin-right: 10px;
+            font-size: 1rem;
+            min-width: 20px;
+        }
+        .badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+        .badge-blue { background: rgba(0, 210, 255, 0.2); border: 1px solid #00d2ff; }
+        .badge-green { background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; }
+        .badge-orange { background: rgba(230, 126, 34, 0.2); border: 1px solid #e67e22; }
+        .badge-red { background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; }
+        .badge-purple { background: rgba(155, 89, 182, 0.2); border: 1px solid #9b59b6; }
+        .solution-hint {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            border-radius: 0 4px 4px 0;
+        }
+        .solution-security { border-color: #e74c3c; }
+        .solution-scaling { border-color: #2ecc71; }
+        .solution-network { border-color: #3498db; }
+        .solution-api { border-color: #9b59b6; }
+        .page-number {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .animation-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.2s; }
+        .animation-delay-3 { animation-delay: 0.3s; }
+        .animation-delay-4 { animation-delay: 0.4s; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .nav-arrow:hover {
+            background: rgba(0, 210, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        .nav-arrow.right {
+            right: 20px;
+        }
+        .nav-arrow.left {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col px-16 py-12 relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Arrows -->
+        <a href="10.html" class="nav-arrow left">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="1.html" class="nav-arrow right">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        
+        <div class="animation-fade-in">
+            <h1 class="title">Future Considerations</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <!-- Future Considerations Grid -->
+        <div class="grid grid-cols-2 gap-6 mt-4">
+            <!-- Cross-Network Integration -->
+            <div class="future-card animation-slide-in-left animation-delay-1">
+                <div class="card-header">
+                    <div class="card-icon network-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h2 class="card-title">Cross-Network Integration</h2>
+                </div>
+                
+                <div>
+                    <span class="badge badge-blue">External Collaboration</span>
+                    <span class="badge badge-orange">Data Sharing</span>
+                </div>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How can scientists from other teams connect to our ML platform?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-network">
+                        <i class="fas fa-lightbulb text-blue-400 mr-2"></i>
+                        <span>Set up <strong>VPN tunnels</strong> with strict firewall rules or implement a <strong>service mesh</strong> with mutual TLS for secure cross-network communication</span>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How to share datasets securely across organization boundaries?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-network">
+                        <i class="fas fa-lightbulb text-blue-400 mr-2"></i>
+                        <span>Implement <strong>federated access controls</strong> with MinIO or use <strong>data transfer nodes</strong> with encrypted transport</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Auto-Scaling -->
+            <div class="future-card animation-slide-in-right animation-delay-1">
+                <div class="card-header">
+                    <div class="card-icon scaling-icon">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                    <h2 class="card-title">Smart Auto-Scaling</h2>
+                </div>
+                
+                <div>
+                    <span class="badge badge-green">Resource Efficiency</span>
+                    <span class="badge badge-blue">Cost Optimization</span>
+                </div>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How to implement automatic scaling with sensible limits?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-scaling">
+                        <i class="fas fa-lightbulb text-green-400 mr-2"></i>
+                        <span> In K8s: Configure <strong>HorizontalPodAutoscaler</strong> with min/max replicas</span>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How to downscale during idle periods to conserve energy?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-scaling">
+                        <i class="fas fa-lightbulb text-green-400 mr-2"></i>
+                        <span>Implement <strong>custom metrics-based scaling</strong> with idle detection or scheduled <strong>Kubernetes CronJobs</strong> for predictable workloads</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Incident Response -->
+            <div class="future-card animation-slide-in-left animation-delay-2">
+                <div class="card-header">
+                    <div class="card-icon security-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="card-title">Security & Recovery</h2>
+                </div>
+                
+                <div>
+                    <span class="badge badge-red">Incident Response</span>
+                    <span class="badge badge-orange">Threat Detection</span>
+                </div>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>What to do in case of a security breach?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-security">
+                        <i class="fas fa-lightbulb text-red-400 mr-2"></i>
+                        <span>Implement <strong>automated breach containment</strong> with network isolation and establish a <strong>roll-back process</strong> to known-good states</span>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How to detect unusual ML model access patterns?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-security">
+                        <i class="fas fa-lightbulb text-red-400 mr-2"></i>
+                        <span><strong>ML-based anomaly detection</strong> on API access logs and <strong>model lineage tracking</strong> to identify suspicious modifications</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- API Exposure -->
+            <div class="future-card animation-slide-in-right animation-delay-2">
+                <div class="card-header">
+                    <div class="card-icon api-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h2 class="card-title">ML API Exposure</h2>
+                </div>
+                
+                <div>
+                    <span class="badge badge-purple">Model Serving</span>
+                    <span class="badge badge-blue">Integration</span>
+                </div>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How to expose ML models externally from Kubernetes?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-api">
+                        <i class="fas fa-lightbulb text-purple-400 mr-2"></i>
+                        <span>Deploy <strong>KServe/TF Serving</strong> with API Gateway or use <strong>MLflow's model serving</strong> capabilities with Ingress control</span>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <span>How to handle versioning and A/B testing of models?</span>
+                    </div>
+                    
+                    <div class="solution-hint solution-api">
+                        <i class="fas fa-lightbulb text-purple-400 mr-2"></i>
+                        <span>Implement <strong>canary deployments</strong> with Istio or use <strong>MLflow Registry's staging/production stages</strong> for controlled rollouts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="bg-black bg-opacity-20 p-4 rounded-lg mt-6 animation-slide-up animation-delay-3">
+            <h3 class="text-lg font-bold mb-3">Implementation Roadmap</h3>
+            <div class="grid grid-cols-4 gap-4 text-center">
+                <div>
+                    <div class="text-md font-semibold mb-2 text-blue-300">Phase 1</div>
+                    <p class="text-sm">Security hardening & cross-network fundamentals</p>
+                </div>
+                <div>
+                    <div class="text-md font-semibold mb-2 text-green-300">Phase 2</div>
+                    <p class="text-sm">Implement auto-scaling & resource optimization</p>
+                </div>
+                <div>
+                    <div class="text-md font-semibold mb-2 text-purple-300">Phase 3</div>
+                    <p class="text-sm">Develop ML model serving APIs & gateways</p>
+                </div>
+                <div>
+                    <div class="text-md font-semibold mb-2 text-red-300">Phase 4</div>
+                    <p class="text-sm">Advanced monitoring & automated response</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-number">11</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                theme: 'dark',
+                securityLevel: 'loose',
+                startOnLoad: true
+            });
+        });
+    </script>
+</body>
+</html> 

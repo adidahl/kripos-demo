@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Statement - Data Science Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        .divider {
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+            width: 15%;
+            margin: 1rem 0;
+        }
+        .constraint-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #3a7bd5;
+            transition: all 0.3s ease;
+        }
+        .constraint-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        .scientist-quote {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .scientist-quote::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50px;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .it-reality {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ff7e5f;
+            margin: 25px 0 15px 0;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        .animation-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animation-fade-in-delay-1 {
+            animation: fadeIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+        .animation-fade-in-delay-2 {
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+            opacity: 0;
+        }
+        .animation-fade-in-delay-3 {
+            animation: fadeIn 0.8s ease-out 0.9s forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .nav-arrow:hover {
+            background: rgba(0, 210, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        .nav-arrow.right {
+            right: 20px;
+        }
+        .nav-arrow.left {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col px-24 py-16 relative">
+        <div class="grid-pattern"></div>
+        
+        <!-- Navigation Arrows -->
+        <a href="1.html" class="nav-arrow left">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a href="3.html" class="nav-arrow right">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        
+        <div class="animation-fade-in">
+            <h1 class="title">Problem Statement</h1>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="scientist-quote animation-fade-in-delay-1">
+            <div class="flex items-center">
+                <i class="fas fa-laptop-code text-4xl mr-4 text-blue-300"></i>
+                <div>
+                    <span class="text-2xl font-semibold">Data Scientists Need:</span>
+                    <p class="text-xl mt-2">"A GPU-powered environment I can log into and start working — <span class="font-bold text-yellow-300">instantly</span>."</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="animation-fade-in-delay-2">
+            <p class="it-reality"><i class="fas fa-exclamation-triangle mr-3"></i>But IT knows it's not that simple...</p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-6 animation-fade-in-delay-3">
+            <div class="constraint-box">
+                <div class="flex items-center">
+                    <i class="fas fa-shield-alt text-3xl mr-4 text-red-400"></i>
+                    <div>
+                        <h3 class="text-lg font-bold">Security</h3>
+                        <p>Access control, data protection, compliance requirements</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="constraint-box">
+                <div class="flex items-center">
+                    <i class="fas fa-database text-3xl mr-4 text-green-400"></i>
+                    <div>
+                        <h3 class="text-lg font-bold">Storage</h3>
+                        <p>Large datasets, model persistence, shared resources</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="constraint-box">
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt text-3xl mr-4 text-yellow-400"></i>
+                    <div>
+                        <h3 class="text-lg font-bold">Performance</h3>
+                        <p>Resource allocation, GPU sharing, network bottlenecks</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="constraint-box">
+                <div class="flex items-center">
+                    <i class="fas fa-server text-3xl mr-4 text-blue-400"></i>
+                    <div>
+                        <h3 class="text-lg font-bold">Availability</h3>
+                        <p>Uptime guarantees, failover, scalable infrastructure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-number">2</div>
+    </div>
+</body>
+</html>

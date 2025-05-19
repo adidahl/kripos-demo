@@ -1,0 +1,15 @@
+artifact_uri: /mlruns/633960564456632817/1a2b5f6a9ef243c68096827dfe2899c7/artifacts
+end_time: 1747565581609
+entry_point_name: ''
+experiment_id: '633960564456632817'
+lifecycle_stage: active
+run_id: 1a2b5f6a9ef243c68096827dfe2899c7
+run_name: grandiose-fawn-938
+run_uuid: 1a2b5f6a9ef243c68096827dfe2899c7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747565293488
+status: 4
+tags: []
+user_id: adi
